@@ -12,12 +12,12 @@ title: "Lista 1 — Condicionais: if / else / elif"
 
 ## Configuração (rode uma vez antes de corrigir)
 
-```{python}
-#| label: setup
+```{python setup}
 import urllib.request, pathlib
 
 URL = "https://raw.githubusercontent.com/SoaresAlisson/fundaj_append/main/lista_1_condicionais/corretor.py"
 pathlib.Path("corretor.py").write_bytes(urllib.request.urlopen(URL).read())
+from corretor import avaliar
 print("corretor.py baixado com sucesso.")
 ```
 
@@ -36,8 +36,7 @@ Atenção: a resposta deve ficar **guardada na variável `categoria`** — não 
 
 ### Sua solução
 
-```{python}
-#| label: ex1-sua-resolucao
+```{python ex1-sua-resolucao}
 # EXERCICIO 1
 # (mantenha a linha acima: o corretor usa ela para achar o seu código)
 
@@ -51,15 +50,13 @@ else:
 
 ### Teste manual (opcional)
 
-```{python}
-#| label: ex1-teste-manual
+```{python ex1-teste-manual}
 print(nota, "->", categoria)
 ```
 
 ### Correção automática
 
-```{python}
-#| label: ex1-correcao
+```{python ex1-correcao}
 from corretor import avaliar
 avaliar(1)   # rode antes a célula "Sua solução" aqui em cima
 ```
@@ -88,8 +85,7 @@ Dica: escreva as condições da mais branda para a mais severa e deixe o `else` 
 
 ### Sua solução
 
-```{python}
-#| label: ex2-sua-resolucao
+```{python ex2-sua-resolucao}
 # EXERCICIO 2
 # (mantenha a linha acima: o corretor usa ela para achar o seu código)
 
@@ -111,15 +107,13 @@ else:
 
 ### Teste manual (opcional)
 
-```{python}
-#| label: ex2-teste-manual
+```{python ex2-teste-manual}
 print(velocidade_medida, "km/h ->", resultado)
 ```
 
 ### Correção automática
 
-```{python}
-#| label: ex2-correcao
+```{python ex2-correcao}
 from corretor import avaliar
 avaliar(2)   # rode antes a célula "Sua solução" aqui em cima
 ```
@@ -144,8 +138,7 @@ Dica: resolva em etapas — primeiro trate o caso de valores zero ou negativos; 
 
 ### Sua solução
 
-```{python}
-#| label: ex3-sua-resolucao
+```{python ex3-sua-resolucao}
 # EXERCICIO 3
 # (mantenha a linha acima: o corretor usa ela para achar o seu código)
 
@@ -163,15 +156,13 @@ semana = 7      # troque para testar
 
 ### Teste manual (opcional)
 
-```{python}
-#| label: ex3-teste-manual
+```{python ex3-teste-manual}
 print(noites, "noites ->", custo_total)
 ```
 
 ### Correção automática
 
-```{python}
-#| label: ex3-correcao
+```{python ex3-correcao}
 from corretor import avaliar
 avaliar(3)   # rode antes a célula "Sua solução" aqui em cima
 ```
