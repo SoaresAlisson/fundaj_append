@@ -4,73 +4,16 @@ title: "Lista 1 — Condicionais: if / else / elif"
 
 ## Como funciona esta lista
 
-- Cada exercicio pede para **completar uma funcao** na celular
-  **Sua solucao** (apague o `...` — nao mexa no nome da funcao).
-- Acelula **Configuracao** baixa o corretor; rode-a uma vez antes.
-- A celula **Correcao automatica** testa varios casos e mostra a nota.
-- O desafio do Exercicio 3 vale ponto extra dentro da mesma nota.
-- Teste manual antes e depois: celula **Teste manual (opcional)**.
+- Cada exercício traz um problema e, logo abaixo, uma célula **Sua solução** com um modelo de código para você completar: apague os `...` e escreva o que falta.
+- As variáveis de entrada (por exemplo, `nota`) já vêm com um valor de exemplo. Troque o valor quantas vezes quiser para testar à mão.
+- Depois de escrever sua solução, **rode a célula dela** e então rode a célula **Correção automática**: ela testa o seu código com vários valores, um por um, e mostra a nota.
+- Regra de ouro: **não troque os nomes das variáveis** (`nota`, `categoria` etc.) e **não apague a primeira linha da célula**, que começa com `# EXERCICIO`. O corretor usa esses nomes para encontrar e avaliar o seu código.
+- As palavras que o exercício pede (por exemplo, `"aprovado"`) devem ser escritas entre aspas, em letras minúsculas e sem acento, exatamente como aparecem na tabela.
 
-## Exercicio 1 — Aprovacao por nota (uma unica condicao)
-
-Complete a funcao usando **um `if` e um `else`** (uma condicao so):
-
-| nota            | retorno       |
-|-----------------|---------------|
-| 40 ou mais      | `"aprovado"`  |
-| menos que 40    | `"reprovado"` |
-
-Regras: retorne a string (nao use `print` na resposta); strings
-minusculas, exatamente `"aprovado"` e `"reprovado"`.
-
-## Exercicio 2 — Multa de radar (if + dois elif)
-
-Um radar mede `velocidade_medida` numa via de `velocidade_maxima`.
-Use **uma unica cadeia** com **dois `elif`** (a ordem importa!). Os
-limites usam o excesso com percentual truncado (`int()` corta as
-casas decimais) e ja vem calculados na funcao:
-
-- `limite_leve`  = `int(1.10 * velocidade_maxima)` (10%)
-- `limite_grave` = `int(1.50 * velocidade_maxima)` (50%)
-
-| comparacao                                   | retorno        |
-|----------------------------------------------|----------------|
-| `velocidade_medida <= velocidade_maxima`     | `"ok"`         |
-| acima do maximo, mas `<= limite_leve`        | `"leve"`       |
-| acima de `limite_leve`, mas `<= limite_grave`| `"grave"`      |
-| acima de `limite_grave`                      | `"gravissima"` |
-
-Exemplos (limite 60): 60 -> `ok`; 61..66 -> `leve`; 67..90 -> `grave`;
-91 ou mais -> `gravissima`.
-
-## Exercicio 3 — Custo de hospedagem (faixas + desafio)
-
-A rede `Sono Tranquilo` cobra `numero_diarias` vezes `preco_diaria`,
-com desconto pela duracao da estadia:
-
-**Parte 1 — desconto por duracao:**
-
-| duracao                | fator                    |
-|------------------------|--------------------------|
-| ate 5 noites           | 1.0 (sem desconto)       |
-| de 6 a 29 noites       | 0.90 (10% de desconto)   |
-| de 30 noites ou mais   | 0.70 (30% de desconto)   |
-
-**Parte 2 — desafio (+1 ponto):** se a estadia tem **exatamente 7
-noites** **e** a reserva e numa **semana impar** do ano
-(`numero_semana % 2 == 1`), multiplica o fator por `0.95` (mais 5%).
-
-Regras gerais: retorne o custo total (numero); se `numero_diarias` ou
-`preco_diaria` vierem zero ou negativos, retorne `0.0`; pequenas
-diferencas de arredondamento sao aceitas pelo corretor.
-
----
-
-## Configuracao (rode primeiro)
+## Configuração (rode uma vez antes de corrigir)
 
 ```{python}
 #| label: setup
-#| tags: [exercicios]
 import urllib.request, pathlib
 
 URL = "https://raw.githubusercontent.com/SoaresAlisson/fundaj_append/main/lista_1_condicionais/corretor.py"
@@ -78,90 +21,157 @@ pathlib.Path("corretor.py").write_bytes(urllib.request.urlopen(URL).read())
 print("corretor.py baixado com sucesso.")
 ```
 
-## Exercicio 1 — Sua solucao
+## Exercício 1 — Aprovação por nota
+
+Neste primeiro exercício, você vai usar uma única condição: **um `if` e um `else`**.
+
+Uma escola aprova quem tira **40 pontos ou mais**; quem tira menos está reprovado. Complete o modelo para que a variável `categoria` receba a classificação certa:
+
+| nota           | `categoria`   |
+|----------------|---------------|
+| 40 ou mais     | `"aprovado"`  |
+| menos que 40   | `"reprovado"` |
+
+Atenção: a resposta deve ficar **guardada na variável `categoria`** — não use `print` para dar a resposta.
+
+### Sua solução
 
 ```{python}
 #| label: ex1-sua-resolucao
-# Complete a funcao abaixo (apague os ...):
+# EXERCICIO 1
+# (mantenha a linha acima: o corretor usa ela para achar o seu código)
 
-def esta_aprovado(nota):
-    ...
+nota = 55   # troque este valor para testar outros casos
+
+if ...:
+    categoria = ...
+else:
+    categoria = ...
 ```
 
-## Exercicio 1 — Teste manual (opcional)
+### Teste manual (opcional)
 
 ```{python}
 #| label: ex1-teste-manual
-print(esta_aprovado(55))    # aprovado
-print(esta_aprovado(39))    # reprovado
+print(nota, "->", categoria)
 ```
 
-## Exercicio 1 — Correcao automatica
+### Correção automática
 
 ```{python}
 #| label: ex1-correcao
 from corretor import avaliar
-avaliar(esta_aprovado)
+avaliar(1)   # rode antes a célula "Sua solução" aqui em cima
 ```
 
-## Exercicio 2 — Sua solucao
+## Exercício 2 — Multa de radar
+
+Agora a decisão tem **quatro saídas**, e a ordem das condições importa. Use **um `if`, dois `elif` e um `else`**, nesta ordem.
+
+Um radar mede a `velocidade_medida` de um carro numa via cujo limite é `velocidade_maxima`. A infração é classificada por quanto o carro passou do limite:
+
+| velocidade medida              | `resultado`     |
+|--------------------------------|-----------------|
+| até o máximo da via            | `"ok"`          |
+| acima do máximo, até 10%       | `"leve"`        |
+| acima de 10%, até 50%          | `"grave"`       |
+| acima de 50%                   | `"gravissima"`  |
+
+Para facilitar, o modelo já calcula os dois pontos de corte com `int()` (que despreza as casas decimais):
+
+- `limite_leve` — o teto da faixa leve (10% acima; numa via de 60 km/h, dá 66);
+- `limite_grave` — o teto da faixa grave (50% acima; na mesma via, dá 90).
+
+Exemplos numa via de 60 km/h: 60 dá `"ok"`; 66 dá `"leve"`; 67 a 90 dão `"grave"`; 91 ou mais dá `"gravissima"`.
+
+Dica: escreva as condições da mais branda para a mais severa e deixe o `else` cobrir o que sobrar.
+
+### Sua solução
 
 ```{python}
 #| label: ex2-sua-resolucao
-def classificar_velocidade(velocidade_medida, velocidade_maxima):
-    limite_leve = int(1.10 * velocidade_maxima)
-    limite_grave = int(1.50 * velocidade_maxima)
+# EXERCICIO 2
+# (mantenha a linha acima: o corretor usa ela para achar o seu código)
 
-    if ...:
-        return ...
-    elif ...:
-        return ...
-    elif ...:
-        return ...
-    else:
-        return ...
+velocidade_medida = 65   # troque para testar
+velocidade_maxima = 60   # troque para testar
+
+limite_leve = int(1.10 * velocidade_maxima)
+limite_grave = int(1.50 * velocidade_maxima)
+
+if ...:
+    resultado = ...
+elif ...:
+    resultado = ...
+elif ...:
+    resultado = ...
+else:
+    resultado = ...
 ```
 
-## Exercicio 2 — Teste manual (opcional)
+### Teste manual (opcional)
 
 ```{python}
 #| label: ex2-teste-manual
-print(classificar_velocidade(60, 60))    # ok
-print(classificar_velocidade(65, 60))    # leve
-print(classificar_velocidade(90, 60))    # grave
-print(classificar_velocidade(91, 60))    # gravissima
+print(velocidade_medida, "km/h ->", resultado)
 ```
 
-## Exercicio 2 — Correcao automatica
+### Correção automática
 
 ```{python}
 #| label: ex2-correcao
 from corretor import avaliar
-avaliar(classificar_velocidade)
+avaliar(2)   # rode antes a célula "Sua solução" aqui em cima
 ```
 
-## Exercicio 3 — Sua solucao
+## Exercício 3 — Custo de hospedagem
+
+Para fechar, uma decisão com **faixas de valores** e, no desafio, uma **condição composta** com `and`.
+
+A rede de hotéis *Sono Tranquilo* cobra `noites` × `diaria`, com desconto conforme a duração da estadia:
+
+| duração da estadia | fator a aplicar |
+|---------------------|-----------------|
+| até 5 noites        | `1.0` (preço cheio) |
+| de 6 a 29 noites    | `0.90` (10% de desconto) |
+| 30 noites ou mais   | `0.70` (30% de desconto) |
+
+O custo final deve ficar na variável `custo_total`. Se `noites` ou `diaria` vierem zero ou negativos, `custo_total` deve ser `0.0`.
+
+**Desafio (vale 1 ponto):** quando a estadia tem **exatamente 7 noites** e a reserva cai numa **semana ímpar** do ano (`semana % 2 == 1`), o hotel concede mais 5% de desconto — ou seja, multiplique o fator por `0.95` antes de calcular o custo.
+
+Dica: resolva em etapas — primeiro trate o caso de valores zero ou negativos; depois escolha o fator com `if`/`elif`/`else`; por fim, com um `if` separado, aplique o desconto extra quando as duas condições do desafio acontecerem juntas (`and`).
+
+### Sua solução
 
 ```{python}
 #| label: ex3-sua-resolucao
-def custo_estadia(numero_diarias, preco_diaria, numero_semana):
-    ...
+# EXERCICIO 3
+# (mantenha a linha acima: o corretor usa ela para achar o seu código)
+
+noites = 7      # troque para testar
+diaria = 300.0  # troque para testar
+semana = 7      # troque para testar
+
+# 1) se noites ou diaria forem zero ou negativos, custo_total = 0.0
+# 2) escolha o fator com if / elif / else: 1.0, 0.90 ou 0.70
+# 3) desafio: exatamente 7 noites E semana impar? multiplique o fator por 0.95
+# 4) calcule custo_total = noites * diaria * fator
+
+...
 ```
 
-## Exercicio 3 — Teste manual (opcional)
+### Teste manual (opcional)
 
 ```{python}
 #| label: ex3-teste-manual
-print(custo_estadia(2, 300.0, 2))     # 600.0    (sem desconto)
-print(custo_estadia(6, 300.0, 2))     # 1620.0   (10% off)
-print(custo_estadia(31, 300.0, 2))    # 6510.0   (30% off)
-print(custo_estadia(0, 300.0, 2))     # 0.0
+print(noites, "noites ->", custo_total)
 ```
 
-## Exercicio 3 — Correcao automatica
+### Correção automática
 
 ```{python}
 #| label: ex3-correcao
 from corretor import avaliar
-avaliar(custo_estadia)
+avaliar(3)   # rode antes a célula "Sua solução" aqui em cima
 ```
