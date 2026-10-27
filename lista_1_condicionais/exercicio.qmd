@@ -1,0 +1,167 @@
+---
+title: "Lista 1 — Condicionais: if / else / elif"
+---
+
+## Como funciona esta lista
+
+- Cada exercicio pede para **completar uma funcao** na celular
+  **Sua solucao** (apague o `...` — nao mexa no nome da funcao).
+- Acelula **Configuracao** baixa o corretor; rode-a uma vez antes.
+- A celula **Correcao automatica** testa varios casos e mostra a nota.
+- O desafio do Exercicio 3 vale ponto extra dentro da mesma nota.
+- Teste manual antes e depois: celula **Teste manual (opcional)**.
+
+## Exercicio 1 — Aprovacao por nota (uma unica condicao)
+
+Complete a funcao usando **um `if` e um `else`** (uma condicao so):
+
+| nota            | retorno       |
+|-----------------|---------------|
+| 40 ou mais      | `"aprovado"`  |
+| menos que 40    | `"reprovado"` |
+
+Regras: retorne a string (nao use `print` na resposta); strings
+minusculas, exatamente `"aprovado"` e `"reprovado"`.
+
+## Exercicio 2 — Multa de radar (if + dois elif)
+
+Um radar mede `velocidade_medida` numa via de `velocidade_maxima`.
+Use **uma unica cadeia** com **dois `elif`** (a ordem importa!). Os
+limites usam o excesso com percentual truncado (`int()` corta as
+casas decimais) e ja vem calculados na funcao:
+
+- `limite_leve`  = `int(1.10 * velocidade_maxima)` (10%)
+- `limite_grave` = `int(1.50 * velocidade_maxima)` (50%)
+
+| comparacao                                   | retorno        |
+|----------------------------------------------|----------------|
+| `velocidade_medida <= velocidade_maxima`     | `"ok"`         |
+| acima do maximo, mas `<= limite_leve`        | `"leve"`       |
+| acima de `limite_leve`, mas `<= limite_grave`| `"grave"`      |
+| acima de `limite_grave`                      | `"gravissima"` |
+
+Exemplos (limite 60): 60 -> `ok`; 61..66 -> `leve`; 67..90 -> `grave`;
+91 ou mais -> `gravissima`.
+
+## Exercicio 3 — Custo de hospedagem (faixas + desafio)
+
+A rede `Sono Tranquilo` cobra `numero_diarias` vezes `preco_diaria`,
+com desconto pela duracao da estadia:
+
+**Parte 1 — desconto por duracao:**
+
+| duracao                | fator                    |
+|------------------------|--------------------------|
+| ate 5 noites           | 1.0 (sem desconto)       |
+| de 6 a 29 noites       | 0.90 (10% de desconto)   |
+| de 30 noites ou mais   | 0.70 (30% de desconto)   |
+
+**Parte 2 — desafio (+1 ponto):** se a estadia tem **exatamente 7
+noites** **e** a reserva e numa **semana impar** do ano
+(`numero_semana % 2 == 1`), multiplica o fator por `0.95` (mais 5%).
+
+Regras gerais: retorne o custo total (numero); se `numero_diarias` ou
+`preco_diaria` vierem zero ou negativos, retorne `0.0`; pequenas
+diferencas de arredondamento sao aceitas pelo corretor.
+
+---
+
+## Configuracao (rode primeiro)
+
+```{python}
+#| label: setup
+#| tags: [exercicios]
+import urllib.request, pathlib
+
+URL = "https://raw.githubusercontent.com/SEU_USUARIO/fundaj-avaliacoes/main/lista_1_condicionais/corretor.py"
+pathlib.Path("corretor.py").write_bytes(urllib.request.urlopen(URL).read())
+print("corretor.py baixado com sucesso.")
+```
+
+## Exercicio 1 — Sua solucao
+
+```{python}
+#| label: ex1-sua-resolucao
+# Complete a funcao abaixo (apague os ...):
+
+def esta_aprovado(nota):
+    ...
+```
+
+## Exercicio 1 — Teste manual (opcional)
+
+```{python}
+#| label: ex1-teste-manual
+print(esta_aprovado(55))    # aprovado
+print(esta_aprovado(39))    # reprovado
+```
+
+## Exercicio 1 — Correcao automatica
+
+```{python}
+#| label: ex1-correcao
+from corretor import avaliar
+avaliar(esta_aprovado)
+```
+
+## Exercicio 2 — Sua solucao
+
+```{python}
+#| label: ex2-sua-resolucao
+def classificar_velocidade(velocidade_medida, velocidade_maxima):
+    limite_leve = int(1.10 * velocidade_maxima)
+    limite_grave = int(1.50 * velocidade_maxima)
+
+    if ...:
+        return ...
+    elif ...:
+        return ...
+    elif ...:
+        return ...
+    else:
+        return ...
+```
+
+## Exercicio 2 — Teste manual (opcional)
+
+```{python}
+#| label: ex2-teste-manual
+print(classificar_velocidade(60, 60))    # ok
+print(classificar_velocidade(65, 60))    # leve
+print(classificar_velocidade(90, 60))    # grave
+print(classificar_velocidade(91, 60))    # gravissima
+```
+
+## Exercicio 2 — Correcao automatica
+
+```{python}
+#| label: ex2-correcao
+from corretor import avaliar
+avaliar(classificar_velocidade)
+```
+
+## Exercicio 3 — Sua solucao
+
+```{python}
+#| label: ex3-sua-resolucao
+def custo_estadia(numero_diarias, preco_diaria, numero_semana):
+    ...
+```
+
+## Exercicio 3 — Teste manual (opcional)
+
+```{python}
+#| label: ex3-teste-manual
+print(custo_estadia(2, 300.0, 2))     # 600.0    (sem desconto)
+print(custo_estadia(6, 300.0, 2))     # 1620.0   (10% off)
+print(custo_estadia(31, 300.0, 2))    # 6510.0   (30% off)
+print(custo_estadia(0, 300.0, 2))     # 0.0
+```
+
+## Exercicio 3 — Correcao automatica
+
+```{python}
+#| label: ex3-correcao
+from corretor import avaliar
+avaliar(custo_estadia)
+```
