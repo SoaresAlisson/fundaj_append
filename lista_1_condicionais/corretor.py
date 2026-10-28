@@ -1,11 +1,11 @@
 # =====================================================================
 #  CORRETOR AUTOMATICO — Lista 1 (condicionais: if / elif / else)
 #  Como usar no notebook/Colab:
-#      from corretor import avaliar, verificar_entrega
+#      from corretor import avaliar, verificar_preenchimento_questoes
 #      avaliar(1)   # corrige o Exercicio 1
 #      avaliar(2)   # corrige o Exercicio 2
 #      avaliar(3)   # corrige o Exercicio 3
-#      verificar_entrega()   # confere se tudo foi feito + nome do aluno
+#      verificar_preenchimento_questoes()   # confere se tudo foi feito + nome do aluno
 #  Este arquivo e baixado pela celula de configuracao da lista.
 # =====================================================================
 #
@@ -22,7 +22,7 @@
 
 import re
 
-TOLERANCIA = 0.01   # aceita diferencas de arredondamento (centavos)
+TOLERANCIA = 0.01  # aceita diferencas de arredondamento (centavos)
 
 # ---------------------------------------------------------------------
 #  Definicao dos exercicios.
@@ -38,13 +38,13 @@ EXERCICIOS = {
         "entradas": ["nota"],
         "saida": "categoria",
         "casos": [
-            ({"nota": 0},   "reprovado"),
-            ({"nota": 15},  "reprovado"),
-            ({"nota": 39},  "reprovado"),
-            ({"nota": 40},  "aprovado"),    # limite: nota 40 aprova
-            ({"nota": 55},  "aprovado"),
-            ({"nota": 59},  "aprovado"),
-            ({"nota": 60},  "aprovado"),
+            ({"nota": 0}, "reprovado"),
+            ({"nota": 15}, "reprovado"),
+            ({"nota": 39}, "reprovado"),
+            ({"nota": 40}, "aprovado"),  # limite: nota 40 aprova
+            ({"nota": 55}, "aprovado"),
+            ({"nota": 59}, "aprovado"),
+            ({"nota": 60}, "aprovado"),
             ({"nota": 100}, "aprovado"),
         ],
     },
@@ -54,15 +54,15 @@ EXERCICIOS = {
         "entradas": ["velocidade_medida", "velocidade_maxima"],
         "saida": "resultado",
         "casos": [
-            ({"velocidade_medida": 30,  "velocidade_maxima": 60}, "ok"),
-            ({"velocidade_medida": 60,  "velocidade_maxima": 60}, "ok"),
-            ({"velocidade_medida": 65,  "velocidade_maxima": 60}, "leve"),
-            ({"velocidade_medida": 66,  "velocidade_maxima": 60}, "leve"),
-            ({"velocidade_medida": 67,  "velocidade_maxima": 60}, "grave"),
-            ({"velocidade_medida": 90,  "velocidade_maxima": 60}, "grave"),
-            ({"velocidade_medida": 91,  "velocidade_maxima": 60}, "gravissima"),
+            ({"velocidade_medida": 30, "velocidade_maxima": 60}, "ok"),
+            ({"velocidade_medida": 60, "velocidade_maxima": 60}, "ok"),
+            ({"velocidade_medida": 65, "velocidade_maxima": 60}, "leve"),
+            ({"velocidade_medida": 66, "velocidade_maxima": 60}, "leve"),
+            ({"velocidade_medida": 67, "velocidade_maxima": 60}, "grave"),
+            ({"velocidade_medida": 90, "velocidade_maxima": 60}, "grave"),
+            ({"velocidade_medida": 91, "velocidade_maxima": 60}, "gravissima"),
             ({"velocidade_medida": 120, "velocidade_maxima": 60}, "gravissima"),
-            ({"velocidade_medida": 88,  "velocidade_maxima": 80}, "leve"),
+            ({"velocidade_medida": 88, "velocidade_maxima": 80}, "leve"),
             ({"velocidade_medida": 100, "velocidade_maxima": 80}, "grave"),
             ({"velocidade_medida": 119, "velocidade_maxima": 80}, "grave"),
             ({"velocidade_medida": 121, "velocidade_maxima": 80}, "gravissima"),
@@ -74,35 +74,38 @@ EXERCICIOS = {
         "entradas": ["noites", "diaria", "semana"],
         "saida": "custo_total",
         "casos": [
-            ({"noites": 2,   "diaria": 300.0, "semana": 2},  600.0),
-            ({"noites": 5,   "diaria": 300.0, "semana": 2},  1500.0),
-            ({"noites": 6,   "diaria": 300.0, "semana": 2},  1620.0),
-            ({"noites": 7,   "diaria": 200.0, "semana": 2},  1260.0),
-            ({"noites": 7,   "diaria": 300.0, "semana": 40}, 1890.0),  # semana 40 e par
-            ({"noites": 31,  "diaria": 300.0, "semana": 2},  6510.0),
-            ({"noites": 70,  "diaria": 100.0, "semana": 2},  4900.0),
-            ({"noites": 100, "diaria": 100.0, "semana": 2},  7000.0),
-            ({"noites": 12,  "diaria": 10.0,  "semana": 2},  108.0),
-            ({"noites": 0,   "diaria": 10.0,  "semana": 2},  0.0),
-            ({"noites": 1,   "diaria": 0.0,   "semana": 2},  0.0),
+            ({"noites": 2, "diaria": 300.0, "semana": 2}, 600.0),
+            ({"noites": 5, "diaria": 300.0, "semana": 2}, 1500.0),
+            ({"noites": 6, "diaria": 300.0, "semana": 2}, 1620.0),
+            ({"noites": 7, "diaria": 200.0, "semana": 2}, 1260.0),
+            ({"noites": 7, "diaria": 300.0, "semana": 40}, 1890.0),  # semana 40 e par
+            ({"noites": 31, "diaria": 300.0, "semana": 2}, 6510.0),
+            ({"noites": 70, "diaria": 100.0, "semana": 2}, 4900.0),
+            ({"noites": 100, "diaria": 100.0, "semana": 2}, 7000.0),
+            ({"noites": 12, "diaria": 10.0, "semana": 2}, 108.0),
+            ({"noites": 0, "diaria": 10.0, "semana": 2}, 0.0),
+            ({"noites": 1, "diaria": 0.0, "semana": 2}, 0.0),
         ],
     },
 }
 
 # Desafio do Exercicio 3 (+1 ponto): semana impar e exatamente 7 noites
 CASOS_DESAFIO = [
-    ({"noites": 7, "diaria": 300.0, "semana": 7},  1795.5),   # 1890.0 - 5%
-    ({"noites": 7, "diaria": 300.0, "semana": 12}, 1890.0),   # semana par
+    ({"noites": 7, "diaria": 300.0, "semana": 7}, 1795.5),  # 1890.0 - 5%
+    ({"noites": 7, "diaria": 300.0, "semana": 12}, 1890.0),  # semana par
     ({"noites": 7, "diaria": 200.0, "semana": 21}, 1197.0),
     ({"noites": 7, "diaria": 100.0, "semana": 33}, 598.5),
-    ({"noites": 13, "diaria": 250.0, "semana": 5}, 2925.0),   # nao e "exatamente 7"
+    ({"noites": 13, "diaria": 250.0, "semana": 5}, 2925.0),  # nao e "exatamente 7"
 ]
 
 
 def checa(resultado, esperado):
     """Compara o resultado do aluno com o valor esperado."""
     if isinstance(esperado, (int, float)) and not isinstance(esperado, bool):
-        return isinstance(resultado, (int, float)) and abs(resultado - esperado) < TOLERANCIA
+        return (
+            isinstance(resultado, (int, float))
+            and abs(resultado - esperado) < TOLERANCIA
+        )
     return resultado == esperado
 
 
@@ -137,20 +140,26 @@ def rodar_casos(codigo_limpo, casos, saida, rotulo, peso_maximo=0.0, imprimir=Tr
             exec(compile(codigo_limpo, rotulo, "exec"), env)
         except Exception as erro:
             if imprimir:
-                print(f"  [FALHOU] {rotulo} {valores!r} -> {type(erro).__name__}: {erro}")
+                print(
+                    f"  [FALHOU] {rotulo} {valores!r} -> {type(erro).__name__}: {erro}"
+                )
             continue
         resultado = env.get(saida)
         if resultado is ...:
             falhas_ellipsis += 1
             if imprimir:
-                print(f"  [FALHOU] {rotulo} {valores!r} -> ainda ha '...' sem preencher.")
+                print(
+                    f"  [FALHOU] {rotulo} {valores!r} -> ainda ha '...' sem preencher."
+                )
         elif checa(resultado, esperado):
             ok += 1
             if imprimir:
                 print(f"  [OK]     {rotulo} {valores!r} -> {resultado!r}")
         else:
             if imprimir:
-                print(f"  [FALHOU] {rotulo} {valores!r} -> {resultado!r}   (esperado {esperado!r})")
+                print(
+                    f"  [FALHOU] {rotulo} {valores!r} -> {resultado!r}   (esperado {esperado!r})"
+                )
     total = len(casos)
     pontos = ok / total * peso_maximo
     if imprimir:
@@ -165,10 +174,12 @@ def avaliar(n, imprimir=True):
     """Corrige o exercicio n (1, 2 ou 3) lendo a celula do notebook.
 
     Devolve (ok, total, pontos, falhas_ellipsis) para uso do
-    verificar_entrega(); imprimir=False suprime a saida detalhada.
+    verificar_preenchimento_questoes(); imprimir=False suprime a saida detalhada.
     """
     if n not in EXERCICIOS:
-        print(f"AVISO: exercicio desconhecido ({n!r}). Use avaliar(1), avaliar(2) ou avaliar(3).")
+        print(
+            f"AVISO: exercicio desconhecido ({n!r}). Use avaliar(1), avaliar(2) ou avaliar(3)."
+        )
         return None
 
     cfg = EXERCICIOS[n]
@@ -182,7 +193,9 @@ def avaliar(n, imprimir=True):
         return None
     if codigo is None:
         if imprimir:
-            print(f"Ainda nao encontrei nenhuma celula com o marcador '{cfg['marcador']}'.")
+            print(
+                f"Ainda nao encontrei nenhuma celula com o marcador '{cfg['marcador']}'."
+            )
             print(f"Rode a celula do exercicio {n} antes de corrigir.")
         return None
 
@@ -192,8 +205,12 @@ def avaliar(n, imprimir=True):
         compile(codigo_limpo, f"<exercicio {n}>", "exec")
     except SyntaxError as e:
         if imprimir:
-            print(f"Erro de SINTAXE na celula do exercicio {n} (linha {e.lineno}): {e.msg}")
-            print("Confira dois-pontos no fim de if/elif/else e a indentacao (4 espacos).")
+            print(
+                f"Erro de SINTAXE na celula do exercicio {n} (linha {e.lineno}): {e.msg}"
+            )
+            print(
+                "Confira dois-pontos no fim de if/elif/else e a indentacao (4 espacos)."
+            )
         return None
 
     if imprimir:
@@ -202,12 +219,18 @@ def avaliar(n, imprimir=True):
         print("=" * 60)
 
     if n == 3:
-        ok1, n1, p1, f1 = rodar_casos(codigo_limpo, cfg["casos"], cfg["saida"], "[parte 1]", 9.0, imprimir)
-        ok2, n2, p2, f2 = rodar_casos(codigo_limpo, CASOS_DESAFIO, cfg["saida"], "[desafio]", 1.0, imprimir)
+        ok1, n1, p1, f1 = rodar_casos(
+            codigo_limpo, cfg["casos"], cfg["saida"], "[parte 1]", 9.0, imprimir
+        )
+        ok2, n2, p2, f2 = rodar_casos(
+            codigo_limpo, CASOS_DESAFIO, cfg["saida"], "[desafio]", 1.0, imprimir
+        )
         resultado = (ok1 + ok2, n1 + n2, p1 + p2, f1 + f2)
         if imprimir:
             print("-" * 60)
-            print(f"  Nota: {p1 + p2:.1f} / 10   (parte 1: {ok1}/{n1} + desafio: {ok2}/{n2})")
+            print(
+                f"  Nota: {p1 + p2:.1f} / 10   (parte 1: {ok1}/{n1} + desafio: {ok2}/{n2})"
+            )
             print("-" * 60)
             if ok1 == n1 and ok2 == n2:
                 print("  *** PARABENS! Parte 1 e desafio: tudo certo. ***")
@@ -221,7 +244,9 @@ def avaliar(n, imprimir=True):
                 print("  (Ainda ha '...' do modelo sem completar no exercicio 3.)")
         return resultado
 
-    ok, total, pontos, falhas_ellipsis = rodar_casos(codigo_limpo, cfg["casos"], cfg["saida"], "[ex" + str(n) + "]", 10.0, imprimir)
+    ok, total, pontos, falhas_ellipsis = rodar_casos(
+        codigo_limpo, cfg["casos"], cfg["saida"], "[ex" + str(n) + "]", 10.0, imprimir
+    )
     if imprimir:
         print("-" * 60)
         print(f"  Nota: {pontos:.1f} / 10   ({ok} de {total} casos)")
@@ -243,8 +268,9 @@ def avaliar(n, imprimir=True):
 #  TESTE DOS TESTES — verificacao final da entrega
 # ---------------------------------------------------------------------
 
-def verificar_entrega(imprimir=True):
-    """Confere se todos os exercicios estao completos e o nome foi preenchido.
+
+def verificar_preenchimento_questoes(imprimir=True):
+    """Confere se todos os exercícios estão completos e o nome foi preenchido.
 
     Retorna (lista_ok, nome):
       lista_ok : True se os 3 exercicios passaram em todos os casos
@@ -286,7 +312,9 @@ def verificar_entrega(imprimir=True):
         print("=" * 60)
         for n, completo in resumo:
             if completo is None:
-                print(f"  Exercicio {n}: PENDENTE  (celula nao rodada ou nao encontrada)")
+                print(
+                    f"  Exercicio {n}: PENDENTE  (celula nao rodada ou nao encontrada)"
+                )
             elif completo:
                 print(f"  Exercicio {n}: COMPLETO (todos os casos passaram)")
             else:
@@ -306,3 +334,4 @@ def verificar_entrega(imprimir=True):
             print("  Faltam exercicios E o nome.")
 
     return exercicios_ok, nome
+
