@@ -1,10 +1,11 @@
 # =====================================================================
 #  CORRETOR AUTOMATICO — Lista 1 (condicionais: if / elif / else)
 #  Como usar no notebook/Colab:
-#      from corretor import avaliar
+#      from corretor import avaliar, verificar_entrega
 #      avaliar(1)   # corrige o Exercicio 1
 #      avaliar(2)   # corrige o Exercicio 2
 #      avaliar(3)   # corrige o Exercicio 3
+#      verificar_entrega()   # confere se tudo foi feito + nome do aluno
 #  Este arquivo e baixado pela celula de configuracao da lista.
 # =====================================================================
 #
@@ -125,8 +126,8 @@ def pega_codigo_aluno(n):
     return None
 
 
-def rodar_casos(codigo_limpo, casos, saida, rotulo, peso_maximo=0.0):
-    """Executa o codigo para cada caso e imprime [OK]/[FALHOU] por caso."""
+def rodar_casos(codigo_limpo, casos, saida, rotulo, peso_maximo=0.0, imprimir=True):
+    """Executa o codigo para cada caso; imprime [OK]/[FALHOU] se imprimir=True."""
     ok = 0
     falhas_ellipsis = 0
     for valores, esperado in casos:
@@ -135,31 +136,40 @@ def rodar_casos(codigo_limpo, casos, saida, rotulo, peso_maximo=0.0):
         try:
             exec(compile(codigo_limpo, rotulo, "exec"), env)
         except Exception as erro:
-            print(f"  [FALHOU] {rotulo} {valores!r} -> {type(erro).__name__}: {erro}")
+            if imprimir:
+                print(f"  [FALHOU] {rotulo} {valores!r} -> {type(erro).__name__}: {erro}")
             continue
         resultado = env.get(saida)
         if resultado is ...:
             falhas_ellipsis += 1
-            print(f"  [FALHOU] {rotulo} {valores!r} -> ainda ha '...' sem preencher.")
+            if imprimir:
+                print(f"  [FALHOU] {rotulo} {valores!r} -> ainda ha '...' sem preencher.")
         elif checa(resultado, esperado):
             ok += 1
-            print(f"  [OK]     {rotulo} {valores!r} -> {resultado!r}")
+            if imprimir:
+                print(f"  [OK]     {rotulo} {valores!r} -> {resultado!r}")
         else:
-            print(f"  [FALHOU] {rotulo} {valores!r} -> {resultado!r}   (esperado {esperado!r})")
+            if imprimir:
+                print(f"  [FALHOU] {rotulo} {valores!r} -> {resultado!r}   (esperado {esperado!r})")
     total = len(casos)
     pontos = ok / total * peso_maximo
-    if peso_maximo > 0:
-        print(f"  ({rotulo}: {ok}/{total} casos -> {pontos:.1f} pontos)")
-    else:
-        print(f"  ({rotulo}: {ok}/{total} casos)")
+    if imprimir:
+        if peso_maximo > 0:
+            print(f"  ({rotulo}: {ok}/{total} casos -> {pontos:.1f} pontos)")
+        else:
+            print(f"  ({rotulo}: {ok}/{total} casos)")
     return ok, total, pontos, falhas_ellipsis
 
 
-def avaliar(n):
-    """Corrige o exercicio n (1, 2 ou 3) lendo a celula do notebook."""
+def avaliar(n, imprimir=True):
+    """Corrige o exercicio n (1, 2 ou 3) lendo a celula do notebook.
+
+    Devolve (ok, total, pontos, falhas_ellipsis) para uso do
+    verificar_entrega(); imprimir=False suprime a saida detalhada.
+    """
     if n not in EXERCICIOS:
         print(f"AVISO: exercicio desconhecido ({n!r}). Use avaliar(1), avaliar(2) ou avaliar(3).")
-        return
+        return None
 
     cfg = EXERCICIOS[n]
 
@@ -167,56 +177,132 @@ def avaliar(n):
     try:
         codigo = pega_codigo_aluno(n)
     except NameError:
-        print("ERRO: este corretor so funciona dentro do notebook (Jupyter/Colab).")
-        return
+        if imprimir:
+            print("ERRO: este corretor so funciona dentro do notebook (Jupyter/Colab).")
+        return None
     if codigo is None:
-        print(f"Ainda nao encontrei nenhuma celula com o marcador '{cfg['marcador']}'.")
-        print(f"Rode a celula do exercicio {n} antes de corrigir.")
-        return
+        if imprimir:
+            print(f"Ainda nao encontrei nenhuma celula com o marcador '{cfg['marcador']}'.")
+            print(f"Rode a celula do exercicio {n} antes de corrigir.")
+        return None
 
     # 2) retira as linhas de entrada e valida a sintaxe
     codigo_limpo = prepara_codigo(codigo, cfg["entradas"])
     try:
         compile(codigo_limpo, f"<exercicio {n}>", "exec")
     except SyntaxError as e:
-        print(f"Erro de SINTAXE na celula do exercicio {n} (linha {e.lineno}): {e.msg}")
-        print("Confira dois-pontos no fim de if/elif/else e a indentacao (4 espacos).")
-        return
+        if imprimir:
+            print(f"Erro de SINTAXE na celula do exercicio {n} (linha {e.lineno}): {e.msg}")
+            print("Confira dois-pontos no fim de if/elif/else e a indentacao (4 espacos).")
+        return None
 
-    print("=" * 60)
-    print(f"  Corrigindo: {cfg['rotulo']}")
-    print("=" * 60)
+    if imprimir:
+        print("=" * 60)
+        print(f"  Corrigindo: {cfg['rotulo']}")
+        print("=" * 60)
 
     if n == 3:
-        ok1, n1, p1, f1 = rodar_casos(codigo_limpo, cfg["casos"], cfg["saida"], "[parte 1]", 9.0)
-        ok2, n2, p2, f2 = rodar_casos(codigo_limpo, CASOS_DESAFIO, cfg["saida"], "[desafio]", 1.0)
-        print("-" * 60)
-        print(f"  Nota: {p1 + p2:.1f} / 10   (parte 1: {ok1}/{n1} + desafio: {ok2}/{n2})")
-        print("-" * 60)
-        if ok1 == n1 and ok2 == n2:
-            print("  *** PARABENS! Parte 1 e desafio: tudo certo. ***")
-        elif ok1 == n1:
-            print("  Parte 1 completa! Falta o desafio (semana impar & 7 noites).")
-        elif ok2 == n2:
-            print("  Desafio ok! Revise as faixas da parte 1 (limites 5 e 29).")
-        else:
-            print("  Confira acima os casos que falharam e as faixas da tabela.")
-        if f1 + f2 > 0:
-            print("  (Ainda ha '...' do modelo sem completar no exercicio 3.)")
-        return
+        ok1, n1, p1, f1 = rodar_casos(codigo_limpo, cfg["casos"], cfg["saida"], "[parte 1]", 9.0, imprimir)
+        ok2, n2, p2, f2 = rodar_casos(codigo_limpo, CASOS_DESAFIO, cfg["saida"], "[desafio]", 1.0, imprimir)
+        resultado = (ok1 + ok2, n1 + n2, p1 + p2, f1 + f2)
+        if imprimir:
+            print("-" * 60)
+            print(f"  Nota: {p1 + p2:.1f} / 10   (parte 1: {ok1}/{n1} + desafio: {ok2}/{n2})")
+            print("-" * 60)
+            if ok1 == n1 and ok2 == n2:
+                print("  *** PARABENS! Parte 1 e desafio: tudo certo. ***")
+            elif ok1 == n1:
+                print("  Parte 1 completa! Falta o desafio (semana impar & 7 noites).")
+            elif ok2 == n2:
+                print("  Desafio ok! Revise as faixas da parte 1 (limites 5 e 29).")
+            else:
+                print("  Confira acima os casos que falharam e as faixas da tabela.")
+            if f1 + f2 > 0:
+                print("  (Ainda ha '...' do modelo sem completar no exercicio 3.)")
+        return resultado
 
-    ok, total, _, falhas_ellipsis = rodar_casos(codigo_limpo, cfg["casos"], cfg["saida"], "[ex" + str(n) + "]")
-    print("-" * 60)
-    nota = ok / total * 10
-    print(f"  Nota: {nota:.1f} / 10   ({ok} de {total} casos)")
-    print("-" * 60)
-    if ok == total:
-        print("  *** PARABENS! Todos os casos passaram. ***")
-    elif ok == 0 and falhas_ellipsis == total:
-        print(f"  Voce ainda nao completou o modelo: substitua cada '...' pela")
-        print(f"  condicao/texto certo e rode o corretor de novo.")
-    elif ok == 0:
-        print("  Nenhum caso passou. Confira: nomes das variaveis-resposta")
-        print("  (minusculas, sem acento), strings exatas e os sinais <= / >=.")
-    else:
-        print("  Quase la! Veja acima os casos que falharam.")
+    ok, total, pontos, falhas_ellipsis = rodar_casos(codigo_limpo, cfg["casos"], cfg["saida"], "[ex" + str(n) + "]", 10.0, imprimir)
+    if imprimir:
+        print("-" * 60)
+        print(f"  Nota: {pontos:.1f} / 10   ({ok} de {total} casos)")
+        print("-" * 60)
+        if ok == total:
+            print("  *** PARABENS! Todos os casos passaram. ***")
+        elif ok == 0 and falhas_ellipsis == total:
+            print("  Voce ainda nao completou o modelo: substitua cada '...' pela")
+            print("  condicao/texto certo e rode o corretor de novo.")
+        elif ok == 0:
+            print("  Nenhum caso passou. Confira: nomes das variaveis-resposta")
+            print("  (minusculas, sem acento), strings exatas e os sinais <= / >=.")
+        else:
+            print("  Quase la! Veja acima os casos que falharam.")
+    return (ok, total, pontos, falhas_ellipsis)
+
+
+# ---------------------------------------------------------------------
+#  TESTE DOS TESTES — verificacao final da entrega
+# ---------------------------------------------------------------------
+
+def verificar_entrega(imprimir=True):
+    """Confere se todos os exercicios estao completos e o nome foi preenchido.
+
+    Retorna (lista_ok, nome):
+      lista_ok : True se os 3 exercicios passaram em todos os casos
+      nome     : string lida da celula de identificacao (ou None)
+    """
+    ip = get_ipython()
+    historico = ip.history_manager.input_hist_parsed
+
+    # --- exercicios: refaz a correcao de cada um, silenciosa ------------
+    exercicios_ok = True
+    resumo = []
+    for n in (1, 2, 3):
+        cfg = EXERCICIOS[n]
+        resultado = avaliar(n, imprimir=False)
+        if resultado is None:
+            exercicios_ok = False
+            resumo.append((n, None))
+        else:
+            ok, total, pontos, _ = resultado
+            completo = ok == total
+            exercicios_ok = exercicios_ok and completo
+            resumo.append((n, completo))
+
+    # --- nome: procura a ultima celula com o marcador de identificacao --
+    nome = None
+    for celula in reversed(historico):
+        primeira = celula.split("\n", 1)[0].strip()
+        if primeira != "# MEU NOME":
+            continue
+        # extrai o valor da atribuicao meu_nome = "..." (ou '...')
+        m = re.search(r'^\s*meu_nome\s*=\s*["\'](.+?)["\']\s*(?:#.*)?$', celula, re.M)
+        if m and m.group(1).strip() and set(m.group(1).strip()) != {"."}:
+            nome = m.group(1).strip()
+            break
+
+    if imprimir:
+        print("=" * 60)
+        print("  VERIFICACAO FINAL DA ENTREGA — Lista 1")
+        print("=" * 60)
+        for n, completo in resumo:
+            if completo is None:
+                print(f"  Exercicio {n}: PENDENTE  (celula nao rodada ou nao encontrada)")
+            elif completo:
+                print(f"  Exercicio {n}: COMPLETO (todos os casos passaram)")
+            else:
+                print(f"  Exercicio {n}: INCOMPLETO (veja 'avaliar({n})' acima)")
+        if nome:
+            print(f"  Aluno: {nome}")
+        else:
+            print("  Nome: NAO PREENCHIDO (rode a celula 'Seu nome' no final)")
+        print("-" * 60)
+        if exercicios_ok and nome:
+            print(f"  *** TUDO CERTO, {nome}! Lista pronta para entregar. ***")
+        elif exercicios_ok:
+            print("  Exercicios completos, mas falta preencher o seu nome.")
+        elif nome:
+            print("  Nome ok, mas ha exercicio(s) incompleto(s).")
+        else:
+            print("  Faltam exercicios E o nome.")
+
+    return exercicios_ok, nome
