@@ -1,0 +1,156 @@
+---
+title: "Lista 2 — Loops (for) e funções (def / return)"
+---
+
+## Como funciona esta lista
+
+- Cada exercício traz um problema e, logo abaixo, uma célula **Sua solução** com um modelo de código para você completar: apague os `...` e escreva o que falta.
+- As variáveis de entrada (por exemplo, `ganhos`) já vêm com um valor de exemplo. Troque o valor quantas vezes quiser para testar à mão.
+- Depois de escrever sua solução, **rode a célula dela** e então rode a célula **Correção automática**: ela testa o seu código com vários valores, um por um, e mostra a nota.
+- Regra de ouro: **não troque os nomes das variáveis** (`total`, `dias_fortes`), **não troque o nome da função** do Exercício 3 e **não apague a primeira linha da célula**, que começa com `# EXERCICIO`. O corretor usa esses nomes para encontrar e avaliar o seu código.
+- No Exercício 3, a resposta deve **sair da função com `return`** — não use `print` para dar a resposta.
+- Antes de qualquer correção, rode a célula **Configuração** abaixo: sem ela, a correção falha com `NameError` em `avaliar`.
+
+## Configuração (rode uma vez antes de corrigir)
+
+```{python setup}
+import urllib.request, pathlib
+
+URL = "https://raw.githubusercontent.com/SoaresAlisson/fundaj_append/main/lista_2_loops_funcoes/corretor.py"
+pathlib.Path("corretor.py").write_bytes(urllib.request.urlopen(URL).read())
+from corretor import avaliar, verificar_preenchimento_questoes
+print("corretor.py baixado com sucesso.")
+```
+
+## Exercício 1 — Total da barraca na feira
+
+Neste primeiro exercício, você vai usar **um laço (loop) `for` e um acumulador**.
+
+A feirante Ana anotou numa lista o quanto ganhou em cada dia de feira. Some todos os valores da lista `ganhos` e guarde o resultado na variável `total`, que o modelo já inicia em `0.0`.
+
+Atenção: some com o **loop `for`** — por razões didáticas, o corretor automático recusa utilizar a função `sum()`. A resposta deve ficar guardada em `total`, sem utilizar a função `print()`.
+
+Dica: a cada iteração do loop, some o valor do dia ao que já está acumulado em `total`.
+
+### Sua solução
+
+```{python ex1-sua-resolucao}
+# EXERCICIO 1
+# (mantenha a linha acima: o corretor a utiliza para achar o seu código)
+
+ganhos = [120.50, 89.90, 45.00, 210.00, 33.75]
+
+total = 0.0
+for ...:
+    total = ...
+```
+
+### Teste manual (opcional)
+
+```{python ex1-teste-manual}
+print(ganhos, "->", total)
+```
+
+### Correção automática
+
+```{python ex1-correcao}
+avaliar(1)   # rode antes a célula "Sua solução" aqui em cima
+```
+
+## Exercício 2 — Dias de chuva forte
+
+Agora o loop ganha **uma condição dentro dele**: um `if` decide o que conta.
+
+A estação meteorológica do bairro classifica como **chuva forte** todo dia em que a precipitação chegou a `limite` milímetros **ou mais**. Dada a lista `chuvas` com a precipitação de cada dia, conte quantos dias tiveram chuva forte e guarde a contagem na variável `dias_fortes`.
+
+| precipitação do dia | conta? |
+|---------------------|--------|
+| `limite` ou mais    | conta  |
+| menos que `limite`  | não conta |
+
+Exemplo: com `limite = 50.0`, a lista do modelo tem **4** dias de chuva forte — `63.5`, `50.0` (o valor exato do limite conta), `91.2` e `75.0`; `49.9` fica de fora.
+
+Dica: `dias_fortes` começa em `0`; dentro do loop, some 1 apenas quando a condição for verdadeira.
+
+### Sua solução
+
+```{python ex2-sua-resolucao}
+# EXERCICIO 2
+# (mantenha a linha acima: o corretor a utiliza para achar o seu código)
+
+chuvas = [12.0, 63.5, 50.0, 8.0, 91.2, 49.9, 75.0]
+limite = 50.0
+
+dias_fortes = 0
+for ...:
+    if ...:
+        dias_fortes = ...
+```
+
+### Teste manual (opcional)
+
+```{python ex2-teste-manual}
+print(chuvas, "->", dias_fortes)
+```
+
+### Correção automática
+
+```{python ex2-correcao}
+avaliar(2)   # rode antes a célula "Sua solução" aqui em cima
+```
+
+## Exercício 3 — Construção de função para gorjeta do restaurante
+
+Para fechar, você vai **construir uma função**: `def`, parâmetro com valor padrão e `return`.
+
+Um restaurante sugere gorjeta de 10% da conta. Complete o corpo da função `gorjeta`: ela recebe o valor da `conta` e o `percentual` da gorjeta (com **valor padrão 10**) e deve **devolver** o valor da gorjeta.
+
+| chamada              | devolve                   |
+|----------------------|---------------------------|
+| `gorjeta(150.0)`     | `15.0` (usa o padrão 10%) |
+| `gorjeta(200.0, 15)` | `30.0`                    |
+| `gorjeta(80.0, 0)`   | `0.0`                     |
+
+Atenção: use a função `return` para devolver o valor . Ao construir funções, o que ela retorna (sua saída/output) é definido por `return`; portanto, não use `print()`. Além disso, **não troque o nome da função nem a linha `def`** — o corretor do exercício vai chamar `gorjeta(...)` para testar vários casos.
+
+### Sua solução
+
+```{python ex3-sua-resolucao}
+# EXERCICIO 3
+# (mantenha a linha acima: o corretor a utiliza para achar o seu código)
+
+def gorjeta(conta, percentual=10):
+    ...   # apague os ... e devolva o valor da gorjeta com return
+```
+
+### Teste manual (opcional)
+
+```{python ex3-teste-manual}
+print("gorjeta(150.0) =", gorjeta(150.0))
+print("gorjeta(200.0, 15) =", gorjeta(200.0, 15))
+```
+
+### Correção automática
+
+```{python ex3-correcao}
+avaliar(3)   # rode antes a célula "Sua solução" aqui em cima
+```
+
+## Seu nome
+
+Antes de entregar, preencha a célula abaixo com o seu nome completo e **rode-a** — a verificação final usa essa informação para identificar a sua lista.
+
+### Preencha e rode
+
+```{python seu-nome}
+# MEU NOME
+# (mantenha a linha acima e preencha a de baixo, entre aspas)
+
+meu_nome = "..."   # <- escreva aqui entre aspas, ex.: "Maria Silva"
+```
+
+### Verificação final da entrega
+
+```{python verificacao-final}
+verificar_preenchimento_questoes()   # confere os 3 exercícios + o seu nome
+```

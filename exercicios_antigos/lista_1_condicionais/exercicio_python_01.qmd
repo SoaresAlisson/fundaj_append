@@ -1,0 +1,239 @@
+---
+title: "Lista 1 — Condicionais: if / else / elif"
+---
+
+## Como funciona esta lista
+
+- Cada exercício traz um problema e, logo abaixo, uma célula **Sua solução** com um modelo de código para você completar: apague os `...` e complete o que falta.
+- As variáveis de entrada (por exemplo, `nota`) já vêm com um valor de exemplo. Troque o valor quantas vezes quiser para testar à mão.
+- Depois de escrever sua solução, **rode a célula dela** e então rode a célula **Correção automática**: ela testa o seu código com vários valores, um por um, e mostra a nota.
+- Regra de ouro: **não troque os nomes das variáveis** (`nota`, `categoria` etc.) e **não apague a primeira linha da célula**, que começa com `# EXERCICIO`. O corretor usa esses nomes para encontrar e avaliar o seu código.
+- As palavras que o exercício pede (por exemplo, `"aprovado"`) devem ser escritas entre aspas, em letras minúsculas e sem acento, exatamente como aparecem na tabela.
+- Ao final, acrescente seu nome e cheque se está tudo ok, rodando o teste dos testes anteriores `Verificação final da entrega`.
+
+## Configuração (rode uma vez antes de corrigir, para carregar o corretor automático do exercício)
+
+```{python setup}
+# ATENÇÂO: rode este bloco de código para carregar o corretor automático dos exercícios
+import urllib.request, pathlib
+
+URL = "https://raw.githubusercontent.com/SoaresAlisson/fundaj_append/main/lista_1_condicionais/corretor.py"
+pathlib.Path("corretor.py").write_bytes(urllib.request.urlopen(URL).read())
+from corretor import avaliar, verificar_preenchimento_questoes
+print("corretor.py baixado com sucesso.")
+```
+
+## Exercício 1 — Aprovação por nota
+
+Neste primeiro exercício, você vai usar uma única condição: **um `if` e um `else`**.
+
+Uma escola aprova quem tira **40 pontos ou mais**; quem tira menos está reprovado. Complete o modelo para que a variável `categoria` receba a classificação certa:
+
+| nota           | `categoria`   |
+|----------------|---------------|
+| 40 ou mais     | `"aprovado"`  |
+| menos que 40   | `"reprovado"` |
+
+Atenção: a resposta deve ficar **guardada na variável `categoria`** — não use `print` para dar a resposta.
+
+### Sua solução
+
+```{python ex1-sua-resolucao}
+# EXERCICIO 1
+# (mantenha a linha acima: o corretor a utiliza para achar o seu código)
+
+nota = 55
+
+if ...:
+    categoria = ...
+else:
+    categoria = ...
+```
+
+### Teste manual (opcional)
+
+```{python ex1-teste-manual}
+print(nota, "->", categoria)
+```
+
+### Correção automática
+
+Este bloco de código vai avaliar se você realizou corretamente o exercício e dar sua nota. Você pode voltar e alterar o exercício até conseguir acertar tudo.
+
+```{python ex1-correcao}
+avaliar(1)   # rode antes a célula "Sua solução" aqui em cima
+```
+
+## Exercício 2 — Multa de radar
+
+Agora a decisão tem **quatro saídas**, e a ordem das condições importa. Use **um `if`, dois `elif` e um `else`**, nesta ordem.
+
+Um radar mede a `velocidade_medida` de um carro numa via cujo limite é `velocidade_maxima`. A infração é classificada por quanto o carro passou do limite:
+
+| velocidade medida              | `resultado`     |
+|--------------------------------|-----------------|
+| até o máximo da via            | `"ok"`          |
+| acima do máximo, até 10%       | `"leve"`        |
+| acima de 10%, até 50%          | `"grave"`       |
+| acima de 50%                   | `"gravissima"`  |
+
+Para facilitar, o modelo já calcula os dois pontos de corte com `int()` (que despreza as casas decimais):
+
+- `limite_leve` — o teto da faixa leve (10% acima; numa via de 60 km/h, dá 66);
+- `limite_grave` — o teto da faixa grave (50% acima; na mesma via, dá 90).
+
+Exemplos numa via de 60 km/h: 60 dá `"ok"`; 66 dá `"leve"`; 67 a 90 dão `"grave"`; 91 ou mais dá `"gravissima"`.
+
+Dica: escreva as condições da mais branda para a mais severa e deixe o `else` cobrir o que sobrar.
+
+### Sua solução
+
+```{python ex2-sua-resolucao}
+# EXERCICIO 2
+# (mantenha a linha acima: o corretor a utiliza para achar o seu código)
+
+velocidade_medida = 65
+velocidade_maxima = 60
+
+limite_leve = int(1.10 * velocidade_maxima)
+limite_grave = int(1.50 * velocidade_maxima)
+
+if ...:
+    resultado = ...
+elif ...:
+    resultado = ...
+elif ...:
+    resultado = ...
+else:
+    resultado = ...
+```
+
+### Teste manual (opcional)
+
+```{python ex2-teste-manual}
+print(velocidade_medida, "km/h ->", resultado)
+```
+
+### Correção automática
+
+```{python ex2-correcao}
+avaliar(2)   # rode antes a célula "Sua solução" aqui em cima
+```
+
+## Exercício 3 — Auxílio da prefeitura (and)
+
+Agora a decisão depende de **duas exigências ao mesmo tempo**: o operador `and` entra em cena.
+
+A prefeitura concederá o auxílio-moradia apenas para famílias que atendem às duas condições abaixo:
+
+- renda mensal **menor que R$ 3.000,00**; **e**
+- **4 moradores ou mais** no domicílio.
+
+Complete o modelo para que a variável `categoria` receba a classificação certa:
+
+| condição da família                    | `categoria`     |
+|----------------------------------------|-----------------|
+| renda < 3000 **e** moradores >= 4       | `"elegivel"`    |
+| qualquer outra combinação               | `"nao_elegivel"` |
+
+Atenção às bordas: renda de exatamente 3000 **não** entra (3000 não é menor que 3000); moradores exatamente 4 **entra** (é 4 ou mais). A resposta deve ficar **guardada na variável `categoria`** — não use `print`.
+
+Dica: junte as duas comparações na mesma condição, com `and` entre elas.
+
+### Sua solução
+
+```{python ex3-sua-resolucao}
+# EXERCICIO 3
+# (mantenha a linha acima: o corretor a utiliza para achar o seu código)
+
+renda = 2500.0     # renda mensal da família, em reais
+moradores = 5      # quantas pessoas moram no domicílio
+
+if ...:
+    categoria = ...
+else:
+    categoria = ...
+```
+
+### Teste manual (opcional)
+
+```{python ex3-teste-manual}
+print(f"renda {renda} e {moradores} moradores ->", categoria)
+```
+
+### Correção automática
+
+Este bloco de código vai avaliar se você realizou corretamente o exercício e dar sua nota. Você pode voltar e alterar o exercício até conseguir acertar tudo.
+
+```{python ex3-correcao}
+avaliar(3)   # rode antes a célula "Sua solução" aqui em cima
+```
+
+## Exercício 4 — Loja abre no fim de semana (or)
+
+Para fechar, uma decisão em que **uma exigência OU outra** basta: o operador `or`.
+
+A mercearia do bairro abre no fim de semana, mas só nele: quando o dia é sábado **ou** domingo, ela abre; em qualquer outro dia da semana, fica fechada.
+
+Complete o modelo para que a variável `abre` receba `True` (abre) ou `False` (fecha):
+
+| dia        | `abre`  |
+|------------|---------|
+| `"sabado"` | `True`  |
+| `"domingo"`| `True`  |
+| outro dia  | `False` |
+
+Atenção: escreva os nomes dos dias entre aspas, em minúsculas e sem acento, exatamente como na tabela.
+
+Dica: compare o dia com cada nome usando `==` e junte as duas comparações com `or`.
+
+### Sua solução
+
+```{python ex4-sua-resolucao}
+# EXERCICIO 4
+# (mantenha a linha acima: o corretor a utiliza para achar o seu código)
+
+dia = "sabado"
+
+if ...:
+    abre = ...
+else:
+    abre = ...
+```
+
+### Teste manual (opcional)
+
+```{python ex4-teste-manual}
+print(f"dia {dia} ->", abre)
+```
+
+### Correção automática
+
+Este bloco de código vai avaliar se você realizou corretamente o exercício e dar sua nota. Você pode voltar e alterar o exercício até conseguir acertar tudo.
+
+```{python ex4-correcao}
+avaliar(4)   # rode antes a célula "Sua solução" aqui em cima
+```
+
+## Seu nome
+
+Antes de entregar, preencha a célula abaixo com o seu nome completo e **rode-a** — a verificação final usa essa informação para identificar a sua lista.
+
+### Preencha e rode
+
+```{python seu-nome}
+# MEU NOME
+# (mantenha a linha acima e preencha a de baixo, entre aspas)
+
+meu_nome = "..."   # <- escreva aqui entre aspas, ex.: "Maria Silva"
+```
+
+### Verificação final da entrega
+
+Verifique se não esqueceu nada rodando a célula abaixo.
+
+```{python verificacao-final}
+verificar_preenchimento_questoes()   # confere os exercícios e o se preencheu o campo nome
+```
+
+Agora é salvar o exercício (ctrl+s), baixar o arquivo no formato ipynb e carregar no Google Workspace da disciplina.
